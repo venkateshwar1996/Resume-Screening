@@ -1,0 +1,43 @@
+#window-div{
+    min-width: 100%;
+    min-height: 100%;
+    background: rgba(78,151,194);
+}
+.DetailsContainer{
+    width: 1000px;
+    display: flex;
+}
+.Container{
+    width: 1000px;
+    border: 4px solid black;   
+    margin: auto; 
+    /* margin-top: 5%; */
+    background: white;   
+}
+.form{
+    align-self: center;
+}
+.input-name{
+    width: 40%;
+    
+}
+.input{
+    width:25%;
+}
+.textarea-exrertise{
+    width: 100%;
+}
+.img-responsive
+{
+    max-width: 33%;
+    max-height: 100%;
+}
+#expertise-text{
+    width: 90%;
+}
+#expertise-button{
+    width:10%;
+}
+#expertise-block{
+    display: flex;
+}

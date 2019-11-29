@@ -1,0 +1,94 @@
+<div id="window-div">
+  <form class="Container" [formGroup]="expertiseForm">
+    <div class="DetailsContainer" class="Row">
+      <mat-form-field class="input-name">
+        <input matInput placeholder="Name" />
+      </mat-form-field>&nbsp;
+      <mat-form-field class="input-id" class="input">
+        <input matInput placeholder="Employee ID" />
+      </mat-form-field>&nbsp;
+      <mat-form-field class="select-location" class="input">
+        <mat-label>Location</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let location of locations" [value]="location.LocationID">
+            {{location.LocationName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="DetailsContainer" class="Row">
+      <mat-form-field class="input-experience" class="input">
+        <input matInput placeholder="Experience" />
+      </mat-form-field>&nbsp;
+      <mat-form-field class="select-req-skill" class="input">
+        <mat-label>Required Skill Set</mat-label>
+        <mat-select multiple>
+          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+        </mat-select>
+      </mat-form-field>&nbsp;
+      <mat-form-field class="select-act-skill" class="input">
+        <mat-label>Actual Skill Set</mat-label>
+        <mat-select multiple>
+          <mat-option *ngFor="let skillSet of skillSets" [value]="skillSet.SkillSetID">{{skillSet.SkillSetName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+    </div>
+    <div class="DetailsContainer" class="Row">
+      <mat-form-field class="textarea-exrertise">
+        <textarea matInput placeholder="Expertise Summary"></textarea>
+      </mat-form-field>
+    </div>
+    <div formArrayName="expertiselist" *ngFor="let arrayItem of expertiseArray; let i=index">
+      <div id="expertise-block">
+        <mat-form-field id="expertise-text">
+          <textarea matInput placeholder="Expertise Area"></textarea>
+        </mat-form-field>&nbsp;
+        <div id="expertise-button">
+          <img class="img-responsive" src="assets/images/Add.png">
+          <img class="img-responsive" src="assets/images/info.png">
+          <img class="img-responsive" src="assets/images/delete.png">
+        </div>
+      </div>
+    </div>
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Highest Degree" />
+      </mat-form-field>&nbsp;
+      <mat-form-field>
+        <input matInput placeholder="College Name" />
+      </mat-form-field>
+    </div>
+    <div formArrayName="expertiselist" *ngFor="let arrayItem of expertiseArray; let i= index">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Project Details
+            </mat-panel-title>
+            <mat-panel-description>
+              Please Enter your project details
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <mat-form-field>
+              <input matInput placeholder="Client Name" />
+            </mat-form-field>&nbsp;
+            <mat-form-field class="select-tech">
+              <mat-label>Technologies Used</mat-label>
+              <mat-select multiple>
+                <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <mat-form-field>
+            <textarea matInput placeholder="Description"></textarea>
+          </mat-form-field><br />
+          <mat-form-field>
+            <textarea matInput placeholder="Client Description"></textarea>
+          </mat-form-field>          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </form>
+</div>
