@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { GenericService } from '../generic.service';
+import { HttpMethodsService } from '../httpMethods/httpmethods.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ResourceformService {
-  baseUrl = environment.baseUrl
 
-  constructor(private genericService: GenericService) { }
+  constructor(private httpMethods: HttpMethodsService) { }
 
-  getLocation() {
-    let url = this.baseUrl + environment.getLocation;
-    return this.genericService.Get(url);
+  getLocation(locationUrl: any) {
+    const url = this.httpMethods.baseUrl + locationUrl;
+    return this.httpMethods.get(url);
   }
-  getSkillSet(){
-    let url = this.baseUrl+environment.getSkillSet;
-    return this.genericService.Get(url);
+
+  getSkillSet(skillSetUrl: any) {
+    const url = this.httpMethods + skillSetUrl;
+    return this.httpMethods.get(url);
   }
+
 }

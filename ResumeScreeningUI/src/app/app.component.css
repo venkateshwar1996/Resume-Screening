@@ -4,11 +4,11 @@
     bottom: 0;
     width: 100%;
     text-align: center;
-    background-color: #ffffff;
+    color: white;
 }
 
 .header {
-    position: fixed;
     top: 0;
+    color: white;
     text-align: center;
 }

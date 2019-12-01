@@ -1,94 +1,167 @@
-<div id="window-div">
-  <form class="Container" [formGroup]="expertiseForm">
-    <div class="DetailsContainer" class="Row">
-      <mat-form-field class="input-name">
-        <input matInput placeholder="Name" />
-      </mat-form-field>&nbsp;
-      <mat-form-field class="input-id" class="input">
-        <input matInput placeholder="Employee ID" />
-      </mat-form-field>&nbsp;
-      <mat-form-field class="select-location" class="input">
-        <mat-label>Location</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let location of locations" [value]="location.LocationID">
-            {{location.LocationName}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="DetailsContainer" class="Row">
-      <mat-form-field class="input-experience" class="input">
-        <input matInput placeholder="Experience" />
-      </mat-form-field>&nbsp;
-      <mat-form-field class="select-req-skill" class="input">
-        <mat-label>Required Skill Set</mat-label>
-        <mat-select multiple>
-          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-        </mat-select>
-      </mat-form-field>&nbsp;
-      <mat-form-field class="select-act-skill" class="input">
-        <mat-label>Actual Skill Set</mat-label>
-        <mat-select multiple>
-          <mat-option *ngFor="let skillSet of skillSets" [value]="skillSet.SkillSetID">{{skillSet.SkillSetName}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      
-    </div>
-    <div class="DetailsContainer" class="Row">
-      <mat-form-field class="textarea-exrertise">
-        <textarea matInput placeholder="Expertise Summary"></textarea>
-      </mat-form-field>
-    </div>
-    <div formArrayName="expertiselist" *ngFor="let arrayItem of expertiseArray; let i=index">
-      <div id="expertise-block">
-        <mat-form-field id="expertise-text">
-          <textarea matInput placeholder="Expertise Area"></textarea>
-        </mat-form-field>&nbsp;
-        <div id="expertise-button">
-          <img class="img-responsive" src="assets/images/Add.png">
-          <img class="img-responsive" src="assets/images/info.png">
-          <img class="img-responsive" src="assets/images/delete.png">
+<div>
+  <mat-card>
+    <form [formGroup]="employeeInfoForm" class="example-form">
+      <div class="row">
+        <div class="col-sm-4">
+          <mat-form-field class="field-width">
+            <input matInput placeholder="Name" autocomplete="off" formControlName="name">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+          <mat-form-field class="field-width">
+            <input matInput placeholder="Employee ID" autocomplete="off" formControlName="employeeID">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+          <mat-form-field>
+            <mat-label>Location</mat-label>
+            <mat-select formControlName="location">
+              <mat-option *ngFor="let l of locations" [value]="l.locationID">
+                {{l.locationName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
-    </div>
-    <div>
-      <mat-form-field>
-        <input matInput placeholder="Highest Degree" />
-      </mat-form-field>&nbsp;
-      <mat-form-field>
-        <input matInput placeholder="College Name" />
-      </mat-form-field>
-    </div>
-    <div formArrayName="expertiselist" *ngFor="let arrayItem of expertiseArray; let i= index">
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Project Details
-            </mat-panel-title>
-            <mat-panel-description>
-              Please Enter your project details
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div>
-            <mat-form-field>
-              <input matInput placeholder="Client Name" />
-            </mat-form-field>&nbsp;
-            <mat-form-field class="select-tech">
-              <mat-label>Technologies Used</mat-label>
-              <mat-select multiple>
-                <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-              </mat-select>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field>
+            <input matInput placeholder="Experience" autocomplete="off" formControlName="experience">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field>
+            <mat-label>Client Name</mat-label>
+            <mat-select formControlName="clientName">
+              <mat-option *ngFor="let c of clientNames" [value]="c.clientID">
+                {{c.clientName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field class="field-width">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let s of requiredSkill" [selectable]="requiredSkillSelectable"
+                [removable]="requiredSkillRemovable" (removed)="remove(s)">
+                {{s}}
+                <mat-icon matChipRemove *ngIf="requiredSkillRemovable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Required Skill Set" #requiredSkillInput [formControl]="requiredSkillSet"
+                [matAutocomplete]="auto1" [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let skill of filteredRequiredSkills | async" [value]="skill">
+                {{skill}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="com-sm-3">
+          <mat-form-field class="field-width">
+            <input matInput placeholder="Actual Skill Set" autocomplete="off" formControlName="actualSkillSet">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <mat-form-field style="width: 100%;">
+            <textarea matInput placeholder="Expertise Summary" formControlName="expertiseSummary"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field class="field-width">
+            <input matInput placeholder="Highest Degree" autocomplete="off" formControlName="highestDegree">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field class="field-width">
+            <input matInput placeholder="College Name" autocomplete="off" formControlName="collegeName">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12" formArrayName="expertiseRows">
+          <div *ngFor="let itemRow of this.employeeInfoForm.controls.expertiseRows.controls; let i=index"
+            [formGroupName]="i">
+            <p>Expertise Area {{i+1}}
+              <span class="icons mt-1">
+                <mat-icon *ngIf="i===0" (click)="addExpertiseRows()">add</mat-icon>
+                <mat-icon class="trash" *ngIf="i != 0" (click)="deleteExpertiseRows(i)">delete</mat-icon>
+              </span>
+            </p>
+            <mat-form-field class="field-width">
+              <input matInput placeholder="Expertise Area" autocomplete="off" formControlName="expertiseArea">
             </mat-form-field>
           </div>
-          <mat-form-field>
-            <textarea matInput placeholder="Description"></textarea>
-          </mat-form-field><br />
-          <mat-form-field>
-            <textarea matInput placeholder="Client Description"></textarea>
-          </mat-form-field>          
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
-  </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12" formArrayName="projectDetailRows">
+          <div *ngFor="let itemRow of this.employeeInfoForm.controls.projectDetailRows.controls; let i=index"
+            [formGroupName]="i">
+            <p>Project Detail {{i+1}}
+              <span class="icons mt-1">
+                <mat-icon *ngIf="i===0" [attr.disabled]="i===2" (click)="addProjectDetailsRows()">add</mat-icon>
+                <mat-icon class="trash" *ngIf="i != 0" (click)="deleteProjectDetailsRows(i)">delete</mat-icon>
+              </span>
+            </p>
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Project Detail
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <mat-form-field class="field-width">
+                      <input matInput placeholder="Client Name" autocomplete="off" formControlName="client">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-6">
+                    <mat-form-field>
+                      <mat-label>Technologies Used</mat-label>
+                      <mat-select formControlName="technologiesUsed">
+                        <mat-option *ngFor="let t of technologies" [value]="t.technologyID">
+                          {{t.technologyName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field style="width: 100%;">
+                      <textarea matInput placeholder="Description" formControlName="description"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field style="width: 100%;">
+                      <textarea matInput placeholder="Client Description"
+                        formControlName="clientDescription"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field class="field-width">
+                      <input matInput placeholder="Responsibilites/Work Items Provided" autocomplete="off"
+                        formControlName="responsibilites">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card>
 </div>

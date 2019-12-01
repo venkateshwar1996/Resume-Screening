@@ -4,11 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: "http://localhost:62825/",
-
-  //method api urls
-  getSkillSet: "api/SkillSet",
-  getLocation:"api/Location"
+  baseUrl: 'http://localhost:62825/api/',
 };
 
 /*
