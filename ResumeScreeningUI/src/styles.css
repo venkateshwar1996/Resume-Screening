@@ -30,3 +30,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.field-width {
+    width: 80% !important;
+}

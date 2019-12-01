@@ -86,11 +86,14 @@
       </div>
       <div class="row">
         <div class="col-sm-12" formArrayName="expertiseRows">
-          <div *ngFor="let itemRow of this.employeeInfoForm.controls.expertiseRows.controls; let i=index"
+          <div *ngFor="let formRow of this.employeeInfoForm.controls.expertiseRows.controls; let i=index"
             [formGroupName]="i">
             <p>Expertise Area {{i+1}}
               <span class="icons mt-1">
-                <mat-icon *ngIf="i===0" (click)="addExpertiseRows()">add</mat-icon>
+                <button mat-button *ngIf="expertideAddButton!==3">
+                  <mat-icon *ngIf="i===0" (click)="addExpertiseRows()">add</mat-icon>
+                </button>
+                <mat-icon (click)="openDialog()">info</mat-icon>
                 <mat-icon class="trash" *ngIf="i != 0" (click)="deleteExpertiseRows(i)">delete</mat-icon>
               </span>
             </p>
@@ -106,7 +109,9 @@
             [formGroupName]="i">
             <p>Project Detail {{i+1}}
               <span class="icons mt-1">
-                <mat-icon *ngIf="i===0" [attr.disabled]="i===2" (click)="addProjectDetailsRows()">add</mat-icon>
+                <button mat-button *ngIf="projectDetailAddButton!==3">
+                  <mat-icon *ngIf="i===0" [attr.disabled]="i===2" (click)="addProjectDetailsRows()">add</mat-icon>
+                </button>
                 <mat-icon class="trash" *ngIf="i != 0" (click)="deleteProjectDetailsRows(i)">delete</mat-icon>
               </span>
             </p>
@@ -150,11 +155,26 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-12">
-                    <mat-form-field class="field-width">
-                      <input matInput placeholder="Responsibilites/Work Items Provided" autocomplete="off"
-                        formControlName="responsibilites">
-                    </mat-form-field>
+                  <div class="col-sm-12" formArrayName="responsibilitesRows">
+                    <div
+                      *ngFor="let responsibilitesItemRow of itemRow.controls.responsibilitesRows.controls; let i=index"
+                      [formGroupName]="i">
+                      <p>Responsibilites/Work Items Provided {{i+1}}
+                        <span class="icons mt-1">
+                          <button mat-button *ngIf="responsibilitesAddBUtton!==3">
+                            <mat-icon *ngIf="i===0" [attr.disabled]="i===2" (click)="addResponsibilitesRows()">add
+                            </mat-icon>
+                          </button>
+                          <mat-icon>info</mat-icon>
+                          <mat-icon class="trash" *ngIf="i != 0" (click)="deleteResponsibilitesRows(i)">delete
+                          </mat-icon>
+                        </span>
+                      </p>
+                      <mat-form-field class="field-width">
+                        <input matInput placeholder="Responsibilites/Work Items Provided" autocomplete="off"
+                          formControlName="responsibilites">
+                      </mat-form-field>
+                    </div>
                   </div>
                 </div>
               </mat-expansion-panel>
@@ -163,5 +183,11 @@
         </div>
       </div>
     </form>
+    <div class="row mt-2">
+      <div class="col-sm-12 card-buttons">
+        <button color="primary" mat-button>CANCEL</button>
+        <button color="accent" mat-button>SUBMIT</button>
+      </div>
+    </div>
   </mat-card>
 </div>

@@ -8,6 +8,8 @@ import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
+import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
 
 @Component({
   selector: 'app-resource-form',
@@ -35,8 +37,11 @@ export class ResourceFormComponent implements OnInit {
     id: number;
   }[];
   locations: Location[];
+  expertideAddButton = 1;
+  projectDetailAddButton = 1;
+  responsibilitesAddBUtton = 1;
 
-  constructor(private fb: FormBuilder, private service: ResourceformService) {
+  constructor(private fb: FormBuilder, private service: ResourceformService, private dialog: MatDialog) {
     this.filteredRequiredSkills = this.requiredSkillSet.valueChanges.pipe(
       startWith(null),
       map((skill: string | null) => skill ? this._filter(skill) : this.allSkills.slice()));
@@ -126,7 +131,7 @@ export class ResourceFormComponent implements OnInit {
         technologiesUsed: [null],
         description: [null],
         clientDescription: [null],
-        responsibilites: [null]
+        responsibilitesRows: this.fb.array([this.initResponsibilitesRows()])
       }
     );
   }
@@ -134,21 +139,55 @@ export class ResourceFormComponent implements OnInit {
   addExpertiseRows() {
     const control = this.employeeInfoForm.controls.expertiseRows as FormArray;
     control.push(this.initExpertiseRows());
+    this.expertideAddButton++;
   }
 
   deleteExpertiseRows(index: number) {
     const control = this.employeeInfoForm.controls.expertiseRows as FormArray;
     control.removeAt(index);
+    this.expertideAddButton--;
   }
 
   addProjectDetailsRows() {
     const control = this.employeeInfoForm.controls.projectDetailRows as FormArray;
     control.push(this.initProjectDetailRows());
+    this.projectDetailAddButton++;
   }
 
   deleteProjectDetailsRows(index: number) {
     const control = this.employeeInfoForm.controls.projectDetailRows as FormArray;
     control.removeAt(index);
+    this.projectDetailAddButton--;
+  }
+
+  initResponsibilitesRows() {
+    return this.fb.group(
+      {
+        responsibilites: [null]
+      }
+    );
+  }
+
+  addResponsibilitesRows() {
+    const control = this.employeeInfoForm.controls.projectDetailRows.controls[0].controls.responsibilitesRows as FormArray;
+    control.push(this.initResponsibilitesRows());
+    this.responsibilitesAddBUtton++;
+  }
+
+  deleteResponsibilitesRows(index: number) {
+    const control = this.employeeInfoForm.controls.projectDetailRows.controls[0].controls.responsibilitesRows as FormArray;
+    control.removeAt(index);
+    this.responsibilitesAddBUtton--;
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(InfoDialogComponent,
+      {
+        width: '800px'
+      });
+    dialogRef.afterClosed().subscribe((returnResult) => {
+
+    });
   }
 
 }

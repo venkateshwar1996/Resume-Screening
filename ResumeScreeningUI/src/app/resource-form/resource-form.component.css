@@ -1,7 +1,3 @@
-.field-width {
-    width: 80% !important;
-}
-
 .icons {
     float: right;
 }
@@ -11,6 +7,11 @@
     cursor: pointer;
 }
 
-.icons .mat-icon :disabled {
+button:disabled{
     cursor: not-allowed;
+}
+
+.card-buttons{
+    display: flex;
+    flex-direction: row-reverse;
 }
