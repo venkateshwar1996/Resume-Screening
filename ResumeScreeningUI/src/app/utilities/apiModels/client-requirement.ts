@@ -1,5 +1,8 @@
+import { Client } from './client';
+
 export class ClientRequirement {
-    clientRequirementID: number;
-    clientID: number;
-    requirementName: string;
+    ClientRequirementID: number;
+    ClientID: number;
+    RequirementName: string;
+    Client: Client;
 }

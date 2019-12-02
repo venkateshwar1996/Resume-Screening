@@ -1,6 +1,6 @@
 export class ProjectTechnology {
-    projectTechnologyID: number;
-    projectID: number;
-    others: string;
-    skillSetID: number;
+    ProjectTechnologyID: number;
+    ProjectID: number;
+    Others: string;
+    SkillSetID: number;
 }

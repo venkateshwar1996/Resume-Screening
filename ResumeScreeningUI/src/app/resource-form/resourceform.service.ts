@@ -15,8 +15,17 @@ export class ResourceformService {
   }
 
   getSkillSet(skillSetUrl: any) {
-    const url = this.httpMethods + skillSetUrl;
+    const url = this.httpMethods.baseUrl + skillSetUrl;
     return this.httpMethods.get(url);
   }
 
+  getRequireSkillSet(reqSkillUrl: any){
+    const url = this.httpMethods.baseUrl+reqSkillUrl;
+    return this.httpMethods.get(url);
+  }
+
+  getClient(clientUrl: any){
+    const url = this.httpMethods.baseUrl+clientUrl;
+    return this.httpMethods.get(url);
+  }
 }

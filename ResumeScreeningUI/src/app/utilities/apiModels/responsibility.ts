@@ -1,5 +1,5 @@
 export class Responsibility {
-    responsibilityID: number;
-    responsibility1: string;
-    projectID: number;
+    ResponsibilityID: number;
+    Responsibility1: string;
+    ProjectID: number;
 }

@@ -4,12 +4,12 @@ import { ProjectDetail } from './project-detail';
 import { RequiredSkillSet } from './required-skill-set';
 
 export class Resource {
-    resourceID: number;
-    resourceName: string;
-    employeeID: number;
-    experience: number;
-    actualSkilSets: ActualSkillSet[];
-    expertiseAreas: ExpertiseArea[];
-    projectDetails: ProjectDetail[];
-    requiredSkillSets: RequiredSkillSet[];
+    ResourceID: number;
+    ResourceName: string;
+    EmployeeID: number;
+    Experience: number;
+    ActualSkilSets: ActualSkillSet[];
+    ExpertiseAreas: ExpertiseArea[];
+    ProjectDetails: ProjectDetail[];
+    RequiredSkillSets: RequiredSkillSet[];
 }

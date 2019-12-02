@@ -10,6 +10,9 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
+import {Urls} from '../utilities/apiUrls';
+import { SkillSet } from '../utilities/apiModels/skill-set';
+import { ClientRequirement } from '../utilities/apiModels/client-requirement';
 
 @Component({
   selector: 'app-resource-form',
@@ -26,7 +29,7 @@ export class ResourceFormComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   filteredRequiredSkills: Observable<string[]>;
   requiredSkill: string[] = [];
-  allSkills: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  reqSkills: string[] = [];
   requiredSkillSet = new FormControl();
 
   @ViewChild('requiredSkillInput', { static: false }) requiredSkillInput: ElementRef<HTMLInputElement>;
@@ -37,6 +40,8 @@ export class ResourceFormComponent implements OnInit {
     id: number;
   }[];
   locations: Location[];
+  skillSets: SkillSet[];
+  requirements: ClientRequirement[];
   expertideAddButton = 1;
   projectDetailAddButton = 1;
   responsibilitesAddBUtton = 1;
@@ -44,7 +49,7 @@ export class ResourceFormComponent implements OnInit {
   constructor(private fb: FormBuilder, private service: ResourceformService, private dialog: MatDialog) {
     this.filteredRequiredSkills = this.requiredSkillSet.valueChanges.pipe(
       startWith(null),
-      map((skill: string | null) => skill ? this._filter(skill) : this.allSkills.slice()));
+      map((skill: string | null) => skill ? this._filter(skill) : this.reqSkills.slice()));
   }
 
   add(event: MatChipInputEvent): void {
@@ -81,21 +86,31 @@ export class ResourceFormComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.allSkills.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+    return this.reqSkills.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
 
   ngOnInit() {
-    // this.expertiseArray = [{ id: 1 }, { id: 2 }];
-    // this.service.getLocation(Urls.getLocation).subscribe((data: any) => {
-    //   if (data) {
-    //     this.locations = data;
-    //   }
-    // });
-    // this.service.getSkillSet(Urls.getSkillSet).subscribe((response: any) => {
-    //   if (response) {
-    //     this.skillSets = response;
-    //   }
-    // });
+    this.expertiseArray = [{ id: 1 }, { id: 2 }];
+    this.service.getLocation(Urls.getLocation).subscribe((data: any) => {
+      if (data) {
+        this.locations = data;
+      }
+    });
+    this.service.getSkillSet(Urls.getSkillSet).subscribe((response: any) => {
+      if (response) {
+        this.skillSets = response;
+      }
+    });
+    this.service.getRequireSkillSet(Urls.getClientRequirements).subscribe((response: any)=>{
+      if(response){
+        this.requirements = response;
+        this.requirements.forEach(element => {
+          this.reqSkills.push(element.RequirementName);
+        });
+        console.log(this.requirements);
+        console.log(this.reqSkills);
+      }
+    })    
 
     this.createForm();
   }

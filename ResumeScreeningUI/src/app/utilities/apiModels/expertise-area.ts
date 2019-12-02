@@ -1,5 +1,5 @@
 export class ExpertiseArea {
-    expertiseID: number;
-    expertise: string;
-    resourceID: number;
+    ExpertiseID: number;
+    Expertise: string;
+    ResourceID: number;
 }
