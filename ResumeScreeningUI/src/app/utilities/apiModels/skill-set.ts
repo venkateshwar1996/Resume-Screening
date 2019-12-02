@@ -1,4 +1,4 @@
 export class SkillSet {
     SkillSetID: number;
-    SkillSetName: string;
+    SKillSetName: string;
 }

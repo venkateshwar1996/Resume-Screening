@@ -41,14 +41,14 @@
         </div>
         <div class="col-sm-3">
           <mat-form-field class="field-width">
-            <mat-chip-list #chipList>
+            <mat-chip-list #chipList2>
               <mat-chip *ngFor="let s of requiredSkill" [selectable]="requiredSkillSelectable"
                 [removable]="requiredSkillRemovable" (removed)="remove(s)">
                 {{s}}
                 <mat-icon matChipRemove *ngIf="requiredSkillRemovable">cancel</mat-icon>
               </mat-chip>
               <input placeholder="Required Skill Set" #requiredSkillInput [formControl]="requiredSkillSet"
-                [matAutocomplete]="auto1" [matChipInputFor]="chipList"
+                [matAutocomplete]="auto1" [matChipInputFor]="chipList2"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
                 (matChipInputTokenEnd)="add($event)">
             </mat-chip-list>
@@ -61,7 +61,22 @@
         </div>
         <div class="com-sm-3">
           <mat-form-field class="field-width">
-            <input matInput placeholder="Actual Skill Set" autocomplete="off" formControlName="actualSkillSet">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let s of actualSkills" [selectable]="requiredSkillSelectable"
+                [removable]="requiredSkillRemovable" (removed)="removeSkill(s)">
+                {{s}}
+                <mat-icon matChipRemove *ngIf="requiredSkillRemovable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Actual Skill Set" #actualSkillInput [formControl]="actualSkillSet"
+                [matAutocomplete]="auto2" [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="addSkill($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selectedSkill($event)">
+              <mat-option *ngFor="let skill of filteredActualSkill | async" [value]="skill">
+                {{skill}}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
         </div>
       </div>

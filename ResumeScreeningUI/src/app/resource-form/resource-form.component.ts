@@ -31,9 +31,15 @@ export class ResourceFormComponent implements OnInit {
   requiredSkill: string[] = [];
   reqSkills: string[] = [];
   requiredSkillSet = new FormControl();
+  filteredActualSkill: Observable<string[]>;
+  actualSkills: string[] = [];
+  actSkills: string[] = [];
+  actualSkillSet = new FormControl();
 
   @ViewChild('requiredSkillInput', { static: false }) requiredSkillInput: ElementRef<HTMLInputElement>;
+  @ViewChild('actualSkillInput', { static: false }) actualSkillInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto1', { static: false }) matAutocomplete1: MatAutocomplete;
+  @ViewChild('auto2', { static: false }) matAutocomplete2: MatAutocomplete;
 
   expertiseForm: FormGroup;
   expertiseArray: {
@@ -50,6 +56,9 @@ export class ResourceFormComponent implements OnInit {
     this.filteredRequiredSkills = this.requiredSkillSet.valueChanges.pipe(
       startWith(null),
       map((skill: string | null) => skill ? this._filter(skill) : this.reqSkills.slice()));
+    this.filteredActualSkill = this.actualSkillSet.valueChanges.pipe(
+      startWith(null),
+      map((skill: string | null) => skill ? this._filterSkill(skill) : this.actSkills.slice()));
   }
 
   add(event: MatChipInputEvent): void {
@@ -69,11 +78,33 @@ export class ResourceFormComponent implements OnInit {
       this.requiredSkillSet.setValue(null);
     }
   }
+  addSkill(event: MatChipInputEvent): void {
+    // Add skill only when MatAutocomplete is not open
+    // To make sure this does not conflict with OptionSelected Event
+    if (!this.matAutocomplete2.isOpen) {
+      const input = event.input;
+      const value = event.value;
+      // Add our skill
+      if ((value || '').trim()) {
+        this.actualSkills.push(value.trim());
+      }
+      // Reset the input value
+      if (input) {
+        input.value = '';
+      }
+      this.actualSkillSet.setValue(null);
+    }
+  }
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.requiredSkill.push(event.option.viewValue);
     this.requiredSkillInput.nativeElement.value = '';
     this.requiredSkillSet.setValue(null);
+  }
+  selectedSkill(event: MatAutocompleteSelectedEvent): void {
+    this.actualSkills.push(event.option.viewValue);
+    this.actualSkillInput.nativeElement.value = '';
+    this.actualSkillSet.setValue(null);
   }
 
 
@@ -83,10 +114,20 @@ export class ResourceFormComponent implements OnInit {
       this.requiredSkill.splice(index, 1);
     }
   }
+  removeSkill(skill: string): void {
+    const index = this.actualSkills.indexOf(skill);
+    if (index >= 0) {
+      this.actualSkills.splice(index, 1);
+    }
+  }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.reqSkills.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  }
+  private _filterSkill(value: string): string[] {
+    const filterValue1 = value.toLowerCase();
+    return this.actSkills.filter(fruit => fruit.toLowerCase().indexOf(filterValue1) === 0);
   }
 
   ngOnInit() {
@@ -107,8 +148,15 @@ export class ResourceFormComponent implements OnInit {
         this.requirements.forEach(element => {
           this.reqSkills.push(element.RequirementName);
         });
-        console.log(this.requirements);
-        console.log(this.reqSkills);
+      }
+    });
+    this.service.getSkillSet(Urls.getSkillSet).subscribe((response: any)=>{
+      if(response)
+      {
+        console.log(response);
+        this.skillSets = response;
+        this.skillSets.forEach(ele=>this.actSkills.push(ele.SKillSetName));
+        console.log(this.actSkills);
       }
     })    
 
