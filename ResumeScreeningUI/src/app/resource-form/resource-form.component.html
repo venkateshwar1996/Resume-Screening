@@ -16,8 +16,8 @@
           <mat-form-field>
             <mat-label>Location</mat-label>
             <mat-select formControlName="location">
-              <mat-option *ngFor="let l of locations" [value]="l.locationID">
-                {{l.locationName}}
+              <mat-option *ngFor="let l of locations" [value]="l.LocationID">
+                {{l.LocationName}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -32,9 +32,9 @@
         <div class="col-sm-3">
           <mat-form-field>
             <mat-label>Client Name</mat-label>
-            <mat-select formControlName="clientName">
-              <mat-option *ngFor="let c of clientNames" [value]="c.clientID">
-                {{c.clientName}}
+            <mat-select formControlName="clientName" [(ngModel)]="clientId" (selectionChange)="clientSelected()">
+              <mat-option *ngFor="let c of clients" [value]="c.ClientID">
+                {{c.ClientName}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -201,7 +201,7 @@
     <div class="row mt-2">
       <div class="col-sm-12 card-buttons">
         <button color="primary" mat-button>CANCEL</button>
-        <button color="accent" mat-button>SUBMIT</button>
+        <button color="accent" mat-button (click)="onSubmit()">SUBMIT</button>
       </div>
     </div>
   </mat-card>

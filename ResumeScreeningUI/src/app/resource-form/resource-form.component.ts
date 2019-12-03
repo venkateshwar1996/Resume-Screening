@@ -10,9 +10,10 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
-import {Urls} from '../utilities/apiUrls';
+import { Urls } from '../utilities/apiUrls';
 import { SkillSet } from '../utilities/apiModels/skill-set';
 import { ClientRequirement } from '../utilities/apiModels/client-requirement';
+import { Client } from '../utilities/apiModels/client';
 
 @Component({
   selector: 'app-resource-form',
@@ -21,6 +22,7 @@ import { ClientRequirement } from '../utilities/apiModels/client-requirement';
 })
 
 export class ResourceFormComponent implements OnInit {
+  clientId;
   employeeInfoForm: any;
   visible = true;
   requiredSkillSelectable = true;
@@ -35,6 +37,10 @@ export class ResourceFormComponent implements OnInit {
   actualSkills: string[] = [];
   actSkills: string[] = [];
   actualSkillSet = new FormControl();
+  filteredRequiredTech: Observable<string[]>;
+  requiredTech: string[] = [];
+  reqTechs: string[] = [];
+  requiredTechSet = new FormControl();
 
   @ViewChild('requiredSkillInput', { static: false }) requiredSkillInput: ElementRef<HTMLInputElement>;
   @ViewChild('actualSkillInput', { static: false }) actualSkillInput: ElementRef<HTMLInputElement>;
@@ -48,6 +54,7 @@ export class ResourceFormComponent implements OnInit {
   locations: Location[];
   skillSets: SkillSet[];
   requirements: ClientRequirement[];
+  clients: Client[];
   expertideAddButton = 1;
   projectDetailAddButton = 1;
   responsibilitesAddBUtton = 1;
@@ -142,23 +149,30 @@ export class ResourceFormComponent implements OnInit {
         this.skillSets = response;
       }
     });
-    this.service.getRequireSkillSet(Urls.getClientRequirements).subscribe((response: any)=>{
-      if(response){
+    this.service.getRequireSkillSet(Urls.getClientRequirements).subscribe((response: any) => {
+      if (response) {
         this.requirements = response;
         this.requirements.forEach(element => {
           this.reqSkills.push(element.RequirementName);
         });
       }
     });
-    this.service.getSkillSet(Urls.getSkillSet).subscribe((response: any)=>{
-      if(response)
-      {
-        console.log(response);
+    this.service.getSkillSet(Urls.getSkillSet).subscribe((response: any) => {
+      if (response) {
         this.skillSets = response;
-        this.skillSets.forEach(ele=>this.actSkills.push(ele.SKillSetName));
-        console.log(this.actSkills);
+        this.skillSets.forEach(ele => this.actSkills.push(ele.SKillSetName));
       }
-    })    
+    });
+    this.service.getLocation(Urls.getLocation).subscribe((response: any) => {
+      if (response) {
+        this.locations = response
+      }
+    });
+    this.service.getClient(Urls.getClients).subscribe((response: any) => {
+      if (response) {
+        this.clients = response;
+      }
+    });
 
     this.createForm();
   }
@@ -252,5 +266,20 @@ export class ResourceFormComponent implements OnInit {
 
     });
   }
+
+  clientSelected(){
+    this.reqSkills = [];
+    let tempRequirements = this.requirements.filter(x=>x.ClientID === this.clientId);
+    tempRequirements.forEach(element => {
+      this.reqSkills.push(element.RequirementName);
+    });
+    this.filteredRequiredSkills = this.requiredSkillSet.valueChanges.pipe(
+      startWith(null),
+      map((skill: string | null) => skill ? this._filter(skill) : this.reqSkills.slice()));
+  }
+
+  onSubmit() {
+    
+}
 
 }
